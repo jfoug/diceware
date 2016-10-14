@@ -38,22 +38,16 @@ void init_word_data () {
 	while (!feof(in) && strncmp(Line, "11111\t", 6)) {
 		fgets(Line, 256, in);
 	}
-	if (feof(in)) {
-		fprintf(stderr, "Error 1 loading %s\n", wordlist_file);
-		exit(1);
-	}
+	if (feof(in))
+		exit(fprintf(stderr, "Error 1 loading %s\n", wordlist_file));
 	for (i = 0; i < 7776; ++i) {
 		strtok(Line, "\r\n");
 		words[i] = strdup(Line);
 		fgets(Line, 256, in);
-		if (feof(in)) {
-			fprintf(stderr, "Error 2 loading %s  Line is %s\n", wordlist_file, Line);
-			exit(1);
-		}
-		if (i < 7775 && atoi(Line) < 1 || atoi(Line) > 66666) {
-			fprintf(stderr, "Error 3 loading %s  Line is %s  i=%d\n", wordlist_file, Line, i);
-			exit(1);
-		}
+		if (feof(in))
+			exit(fprintf(stderr, "Error 2 loading %s  Line is %s\n", wordlist_file, Line));
+		if (i < 7775 && atoi(Line) < 1 || atoi(Line) > 66666)
+			exit(fprintf(stderr, "Error 3 loading %s  Line is %s  i=%d\n", wordlist_file, Line, i));
 	}
 	fclose(in);
 }
@@ -172,6 +166,7 @@ int main(int argc, char **argv) {
 				break;
 			}
 		}
+		entropy_curl_get_random_org_data(&E);
 		if (until_bits > 0.0 && until_bits < bits) {
 			if (!with_sym)
 				break;

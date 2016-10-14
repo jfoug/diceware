@@ -27,13 +27,19 @@ modification, are permitted provided that the following conditions are met:
 #include <Winioctl.h>   //DISK_GEOMETRY
 #include <Wmistr.h>     //WNODE_HEADER
 #include <winternl.h>
+#include <stdint.h>
 
 typedef struct entropy_t {
-	unsigned char sha256_h[32];							// SHA256 of prior entropy structure (kinda CBC mode)
+	union {
+		unsigned char sha256_h[32];							// SHA256 of prior entropy structure (kinda CBC mode)
+		uint32_t sha256_32[8];
+	};
+	unsigned random_org_data_read;
+	unsigned char random_org_data[256];
 	int counter;										// simple incremental counter
 	ULONG li1;											// GetTickCount()
 	LARGE_INTEGER li2;									// QueryPerformanceCounter
-	long long li3;										// QueryUnbiasedInterruptTime 
+	long long li3;										// QueryUnbiasedInterruptTime
 	SYSTEM_PERFORMANCE_INFORMATION perf;				// call to NtQuerySystemInformation(SystemPerformanceInformation)
 	SYSTEM_PERFORMANCE_INFORMATION perf2;				// call to NtQuerySystemInformation(SystemPerformanceInformation)
 	SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION pperf;		// call to NtQuerySystemInformation(SystemProcessorPerformanceInformation)
@@ -45,5 +51,6 @@ typedef struct entropy_t {
 extern unsigned char *entropy_slurp(entropy *E);
 extern unsigned entropy_get_bit(entropy *pE);
 extern unsigned entropy_get_die(entropy *pE);
+extern void entropy_curl_get_random_org_data(entropy *pE);
 
 #endif // _RND__H

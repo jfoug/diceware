@@ -17,7 +17,12 @@ modification, are permitted provided that the following conditions are met:
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#ifdef _MSC_VER
+#include "VC/getopt.h"
+#define strdup _strdup
+#else
 #include <unistd.h>
+#endif
 
 const char *wordlist_file = "beale.wordlist.asc";
 
@@ -101,14 +106,6 @@ int load_args(int argc, char **argv) {
 			until_bits = atof(cp);
 			break;
 		}
-		case '?':
-			if (optopt == 'w')
-			  fprintf (stderr, "Option -%c requires an argument.\n", optopt);
-			else if (isprint (optopt))
-				fprintf (stderr, "Unknown option `-%c'.\n", optopt);
-			else
-				fprintf (stderr, "Unknown option character `\\x%x'.\n", optopt);
-			return 1;
 		default:
 			usage();
 	}
@@ -116,6 +113,7 @@ int load_args(int argc, char **argv) {
 		fprintf(stderr, "Error, using -w and -b is mutually exclusive\n\n");
 		usage();
 	}
+	return 0;
 }
 int main(int argc, char **argv) {
 	int i, j, k;

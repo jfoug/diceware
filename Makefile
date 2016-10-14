@@ -21,7 +21,10 @@ CC = gcc
 #CFLAGS = -O2
 
 diceware: $(OBJS)
-	$(CC) -o diceware $(OBJS) -lssl -lcrypto
+	$(CC) -o diceware $(OBJS) -lssl -lcrypto -lcurl
 
 .c.o:
 	$(CC) -c $(CFLAGS) $<
+
+clean:
+	rm -f *.o *.exe

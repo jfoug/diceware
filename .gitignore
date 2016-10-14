@@ -1,4 +1,11 @@
 *.stackdump
+*.vcxproj.user
+*.suo
+*.opensdf
+*.sdf
+ipch/
+Debug/
+Release/
 
 # Object files
 *.o

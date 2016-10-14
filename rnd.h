@@ -13,16 +13,20 @@ modification, are permitted provided that the following conditions are met:
   and/or other materials provided with the distribution.
 */
 
-#define _WIN32_WINNT 0x0601
-#include <windows.h>
-#include <Winioctl.h>   //DISK_GEOMETRY
-#include <Wmistr.h>     //WNODE_HEADER
-#include <winternl.h>
+#ifndef _RND__H
+#define _RND__H
+
 #include "openssl/sha.h"
 
 // This is a crypto secure random method of rolling a die.  We build up entropy (lots of it)
 // in our entropy stucture. Then we take all that entropy, and pack it down into 1 bit. We get
 // 16 of these bits for EACH dice roll.
+
+#define _WIN32_WINNT 0x0601
+#include <windows.h>
+#include <Winioctl.h>   //DISK_GEOMETRY
+#include <Wmistr.h>     //WNODE_HEADER
+#include <winternl.h>
 
 typedef struct entropy_t {
 	unsigned char sha256_h[32];							// SHA256 of prior entropy structure (kinda CBC mode)
@@ -41,3 +45,5 @@ typedef struct entropy_t {
 extern unsigned char *entropy_slurp(entropy *E);
 extern unsigned entropy_get_bit(entropy *pE);
 extern unsigned entropy_get_die(entropy *pE);
+
+#endif // _RND__H

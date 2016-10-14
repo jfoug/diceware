@@ -1,4 +1,5 @@
 *.stackdump
+*.vcxproj.filters
 *.vcxproj.user
 *.suo
 *.opensdf
